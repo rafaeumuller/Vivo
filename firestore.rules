@@ -1,0 +1,108 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Schema Validation Helpers
+    function isValidHabit(data) {
+      return data.keys().hasAll(['id', 'name', 'emoji', 'description', 'pts', 'color', 'createdAt'])
+        && data.keys().size() == 7
+        && data.id is string && data.id.size() <= 128
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.emoji is string && data.emoji.size() > 0 && data.emoji.size() <= 10
+        && data.description is string && data.description.size() <= 200
+        && data.pts is number && data.pts >= 1 && data.pts <= 100
+        && data.color is string && data.color.size() <= 30
+        && data.createdAt is string && data.createdAt.size() <= 20;
+    }
+
+    function isValidCompletion(data) {
+      return data.keys().hasAll(['id', 'habitId', 'date'])
+        && data.keys().size() == 3
+        && data.id is string && data.id.size() <= 128
+        && data.habitId is string && data.habitId.size() <= 128
+        && data.date is string && data.date.size() <= 20;
+    }
+
+    function isValidHabitNote(data) {
+      return data.keys().hasAll(['id', 'habitId', 'date', 'note'])
+        && data.id is string && data.id.size() <= 128
+        && data.habitId is string && data.habitId.size() <= 128
+        && data.date is string && data.date.size() <= 20
+        && data.note is string && data.note.size() <= 2000
+        && (!('updatedAt' in data) || (data.updatedAt is string && data.updatedAt.size() <= 40));
+    }
+
+    // User Subcollection Scopes
+    match /users/{userId} {
+      // Just a user document reference
+      allow read, write: if isOwner(userId);
+
+      // 2. Habits Subcollection
+      match /habits/{habitId} {
+        allow read, list: if isOwner(userId);
+        
+        allow create: if isOwner(userId) 
+          && isValidId(habitId) 
+          && isValidHabit(request.resource.data);
+
+        allow update: if isOwner(userId)
+          && isValidId(habitId)
+          && isValidHabit(request.resource.data)
+          && request.resource.data.id == resource.data.id
+          && request.resource.data.createdAt == resource.data.createdAt; // Immortal field check
+
+        allow delete: if isOwner(userId);
+      }
+
+      // 3. Completions Subcollection
+      match /completions/{completionId} {
+        allow read, list: if isOwner(userId);
+
+        allow create: if isOwner(userId)
+          && isValidId(completionId)
+          && isValidCompletion(request.resource.data);
+
+        allow update: if isOwner(userId)
+          && isValidId(completionId)
+          && isValidCompletion(request.resource.data)
+          && request.resource.data.id == resource.data.id;
+
+        allow delete: if isOwner(userId);
+      }
+
+      // 4. Habit Notes Subcollection
+      match /habitNotes/{noteId} {
+        allow read, list: if isOwner(userId);
+
+        allow create: if isOwner(userId)
+          && isValidId(noteId)
+          && isValidHabitNote(request.resource.data);
+
+        allow update: if isOwner(userId)
+          && isValidId(noteId)
+          && isValidHabitNote(request.resource.data)
+          && request.resource.data.id == resource.data.id;
+
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

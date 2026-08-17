@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "Habit": {
+      "title": "Habit",
+      "description": "Hábito diário a ser monitorado pelo usuário.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "emoji": { "type": "string" },
+        "description": { "type": "string" },
+        "pts": { "type": "number" },
+        "color": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "name", "emoji", "pts", "color", "createdAt"]
+    },
+    "Completion": {
+      "title": "Completion",
+      "description": "Indica a conclusão de um hábito em um determinado dia.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "habitId": { "type": "string" },
+        "date": { "type": "string" }
+      },
+      "required": ["id", "habitId", "date"]
+    },
+    "HabitNote": {
+      "title": "HabitNote",
+      "description": "Anotação diária associada a um hábito específico.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "habitId": { "type": "string" },
+        "date": { "type": "string" },
+        "note": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "habitId", "date", "note"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/habits/{habitId}": {
+      "schema": "Habit",
+      "description": "Lista de hábitos de cada usuário"
+    },
+    "/users/{userId}/completions/{completionId}": {
+      "schema": "Completion",
+      "description": "Registro de hábitos concluídos por dia por cada usuário"
+    },
+    "/users/{userId}/habitNotes/{noteId}": {
+      "schema": "HabitNote",
+      "description": "Anotações diárias nos hábitos"
+    }
+  }
+}
