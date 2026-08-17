@@ -1,0 +1,9 @@
+{
+  "apiKey": "AIzaSyFakePlaceholderKeyOnly",
+  "authDomain": "mock-app.firebaseapp.com",
+  "projectId": "mock-app",
+  "storageBucket": "mock-app.appspot.com",
+  "messagingSenderId": "123456789",
+  "appId": "1:123456789:web:abcdef",
+  "firestoreDatabaseId": "(default)"
+}

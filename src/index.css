@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Syne", sans-serif;
+  --font-mono: "Space Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+body {
+  background-color: #0a0a0f;
+  color: #f3f4f6;
+  font-family: var(--font-sans);
+}
+
+/* Custom styles etc. */
+.theme-neon-green {
+  color: #7fff6e;
+}
+.theme-cyan {
+  color: #3dffc3;
+}
+.theme-yellow {
+  color: #ffd166;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d14;
+}
+::-webkit-scrollbar-thumb {
+  background: #1f1f2e;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3dffc3;
+}
+
+/* Animation for progress bar */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer-progress {
+  background: linear-gradient(90deg, #7fff6e 0%, #3dffc3 50%, #7fff6e 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite linear;
+}
+

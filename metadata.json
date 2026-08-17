@@ -1,0 +1,6 @@
+{
+  "name": "VIVO - Rastreador de Hábitos",
+  "description": "Rastreador de hábitos pessoais focado em evolução diária, progresso por níveis, streaks e calendário integrados.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
