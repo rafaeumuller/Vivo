@@ -1,9 +1,8 @@
-{
-  "apiKey": "AIzaSyFakePlaceholderKeyOnly",
-  "authDomain": "mock-app.firebaseapp.com",
-  "projectId": "mock-app",
-  "storageBucket": "mock-app.appspot.com",
-  "messagingSenderId": "123456789",
-  "appId": "1:123456789:web:abcdef",
-  "firestoreDatabaseId": "(default)"
-}
+const firebaseConfig = {
+  apiKey: "AIzaSyBSh4e-sKC_YnIJ_kzml5N6TA4XfeUZQ5Q",
+  authDomain: "vivo-habits.firebaseapp.com",
+  projectId: "vivo-habits",
+  storageBucket: "vivo-habits.firebasestorage.app",
+  messagingSenderId: "430711684799",
+  appId: "1:430711684799:web:48bdf69d4cdf2ea5f8100a"
+};
